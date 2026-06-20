@@ -7,7 +7,7 @@ import Tasks from "./Tasks";
 function App() {
   const json = {
     planned: [
-      { id: nanoid(), mission: 'Пример', isOpenMenu: false, isEdit: false }
+      { id: nanoid(), mission: 'Пример', openMenu: false, isEdit: false }
     ],
     progress: [],
     completed: [],
@@ -27,18 +27,71 @@ function App() {
     }
   }, [])
 
-  function isOpenMenu(id) {
+  function delTask(id, type) {
     setTable(isTable => {
-      const res = isTable.planned.map((elem) => {
-        if (id == elem.id) {
-          return { ...elem, mission: !elem.isOpenMenu }
+      const index = isTable[type].findIndex(elem => id == elem.id)
+
+      let json;
+      if (type == 'planned') {
+        json = {
+          planned: [
+            ...table[type].slice(0, index),
+            ...table[type].slice(index + 1)
+          ],
+          progress: [...table.progress],
+          completed: [...table.completed],
         }
-        return elem
+      } else if (type == 'progress') {
+        json = {
+          planned: [...table.planned],
+          progress: [
+            ...table[type].slice(0, index),
+            ...table[type].slice(index + 1)
+          ],
+          completed: [...table.completed],
+        }
+      } else if (type == 'completed') {
+        json = {
+          planned: [...table.planned],
+          progress: [...table.progress],
+          completed: [
+            ...table[type].slice(0, index),
+            ...table[type].slice(index + 1)
+          ],
+        }
+      }
+      localStorage.setItem('table', JSON.stringify(json))
+      return json
+    })
+  }
+
+  function isOpenMenu(id, type) {
+    setTable(isTable => {
+      const res = isTable[type].map((elem) => {
+        if (id == elem.id) {
+          return { ...elem, openMenu: !elem.openMenu }
+        }
+        return { ...elem, openMenu: false }
       })
-      const json = {
-        planned: res,
-        progress: [...table.progress],
-        completed: [...table.completed],
+      let json;
+      if (type == 'planned') {
+        json = {
+          planned: res,
+          progress: [...table.progress],
+          completed: [...table.completed],
+        }
+      } else if (type == 'progress') {
+        json = {
+          planned: [...table.planned],
+          progress: res,
+          completed: [...table.completed],
+        }
+      } else if (type == 'completed') {
+        json = {
+          planned: [...table.planned],
+          progress: [...table.progress],
+          completed: res,
+        }
       }
       localStorage.setItem('table', JSON.stringify(json))
       return json
@@ -46,9 +99,8 @@ function App() {
 
   }
 
-  function editTask(id) {
-    console.log(valueEdit)
-    if(valueEdit == '') return;
+  function editTask(id, type) {
+    if (valueEdit == '') return;
     setTable(isTable => {
       const res = isTable.planned.map((elem) => {
         if (id == elem.id) {
@@ -66,10 +118,10 @@ function App() {
     })
     setValueEdit('')
     isEdit(id)
-    isOpenMenu(id)
+    isOpenMenu(id, type)
   }
 
-  function isEdit(id){
+  function isEdit(id) {
     setTable(isTable => {
       const res = isTable.planned.map((elem) => {
         if (id == elem.id) {
@@ -87,23 +139,7 @@ function App() {
     })
   }
 
-  function isOpenMenu(id){
-    setTable(isTable => {
-      const res = isTable.planned.map((elem) => {
-        if (id == elem.id) {
-          return { ...elem, isOpenMenu: !elem.isOpenMenu }
-        }
-        return elem
-      })
-      const json = {
-        planned: res,
-        progress: [...table.progress],
-        completed: [...table.completed],
-      }
-      localStorage.setItem('table', JSON.stringify(json))
-      return json
-    })
-  }
+
 
   function newPlan() {
     if (value == '') {
@@ -113,7 +149,7 @@ function App() {
     const json = {
       planned: [
         ...table.planned,
-        { id: nanoid(), mission: value, isOpenMenu: false, isEdit: false }
+        { id: nanoid(), mission: value, openMenu: false, isEdit: false }
       ],
       progress: [...table.progress],
       completed: [...table.completed],
@@ -122,6 +158,41 @@ function App() {
     setOpenNew(false)
     setValue('')
     localStorage.setItem('table', JSON.stringify(json))
+  }
+
+  function nextTask(id, type) {
+    isEdit()
+    isOpenMenu(id, type)
+    setTable(isTable => {
+      let taskToMove = null;
+      const filteredArray = isTable[type].filter(elem => {
+        if (id == elem.id) {
+          taskToMove = { ...elem }
+          return false;
+        }
+        return true;
+      })
+      let json;
+      if (type == 'planned') {
+        json = {
+          planned: filteredArray,
+          progress: [...isTable.progress, taskToMove],
+          completed: [...isTable.completed],
+        }
+
+      } else if (type == 'progress') {
+        json = {
+          planned: [...isTable.planned],
+          progress: filteredArray,
+          completed: [...isTable.completed, taskToMove],
+        }
+      }
+
+      localStorage.setItem('table', JSON.stringify(json))
+      return json
+    })
+
+
   }
 
   return (<>
@@ -140,6 +211,8 @@ function App() {
             valueEdit={valueEdit}
             setValueEdit={setValueEdit}
             isEdit={isEdit}
+            delTask={delTask}
+            nextTask={nextTask}
           />
         </div>
       </section>
@@ -148,6 +221,13 @@ function App() {
           В процессе
         </div>
         <div className="info">
+          <Tasks
+            table={table}
+            type='progress'
+            isOpenMenu={isOpenMenu}
+            delTask={delTask}
+            nextTask={nextTask}
+          />
         </div>
       </section>
       <section className="table completed">
@@ -155,11 +235,16 @@ function App() {
           Завершено
         </div>
         <div className="info">
+          <Tasks
+            table={table}
+            type='completed'
+            isOpenMenu={isOpenMenu}
+            delTask={delTask}
+          />
         </div>
       </section>
     </div>
     {isOpenNew && <NewPlan newPlan={newPlan} setOpenNew={setOpenNew} value={value} setValue={setValue} />}
   </>);
 }
-
 export default App;

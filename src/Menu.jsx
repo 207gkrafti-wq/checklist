@@ -1,19 +1,21 @@
+import { memo } from "react";
 
-function Menu({ editTask, type, id, isEdit, elemIsEdit }) {
+function Menu({ editTask, type, id, isEdit, elemIsEdit, delTask, nextTask }) {
     return (<>
         <div className="edit">
             {
                 type == 'planned' ?
                     (
                         elemIsEdit ?
-                            <button onClick={() => editTask(id)}>Сохранить</button>
+                            <button onClick={() => editTask(id, type)}>Сохранить</button>
                             : <button onClick={() => isEdit(id)}>Изменить</button>
                     )
                     : null
             }
-            <button>Удалить</button>
+            {type != 'completed' && <button onClick={() => nextTask(id, type)}>Далее</button>}
+            <button onClick={() => delTask(id, type)}>Удалить</button>
         </div>
     </>)
 }
 
-export default Menu;
+export default memo(Menu);

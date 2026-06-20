@@ -1,6 +1,7 @@
+import { memo } from "react";
 import Menu from "./Menu";
 
-function Tasks({ table, editTask, type, isOpenMenu, isEdit, setValueEdit, valueEdit }) {
+function Tasks({ table, editTask, type, isOpenMenu, isEdit, setValueEdit, valueEdit, delTask, nextTask }) {
 
     const result = table[type].map((elem, index) => {
         return <li key={elem.id}>
@@ -10,15 +11,17 @@ function Tasks({ table, editTask, type, isOpenMenu, isEdit, setValueEdit, valueE
                     : <span>{elem.mission}</span>
             }
 
-            <button onClick={() => isOpenMenu(elem.id)}>•••</button>
-            {elem.isOpenMenu &&
-                <Menu
+            <button onClick={() => isOpenMenu(elem.id, type)}>•••</button>
+            {elem.openMenu &&
+                <Menu 
                     id={elem.id}
                     editTask={editTask}
                     isEdit={isEdit}
                     elemIsEdit={elem.isEdit}
                     type={type}
                     index={index}
+                    delTask={delTask}
+                    nextTask={nextTask}
                 />
             }
         </li>
@@ -31,4 +34,4 @@ function Tasks({ table, editTask, type, isOpenMenu, isEdit, setValueEdit, valueE
     </>);
 }
 
-export default Tasks;
+export default memo(Tasks);
