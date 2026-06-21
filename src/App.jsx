@@ -7,7 +7,7 @@ import Tasks from "./Tasks";
 function App() {
   const json = {
     planned: [
-      { id: nanoid(), mission: 'Пример', openMenu: false, isEdit: false }
+      { id: nanoid(), mission: 'Пример', openMenu: false, isEdit: false },
     ],
     progress: [],
     completed: [],
@@ -66,6 +66,7 @@ function App() {
   }
 
   function isOpenMenu(id, type) {
+    isEdit()
     setTable(isTable => {
       const res = isTable[type].map((elem) => {
         if (id == elem.id) {
@@ -75,6 +76,7 @@ function App() {
       })
       let json;
       if (type == 'planned') {
+
         json = {
           planned: res,
           progress: [...table.progress],
@@ -148,8 +150,8 @@ function App() {
     }
     const json = {
       planned: [
+        { id: nanoid(), mission: value, openMenu: false, isEdit: false },
         ...table.planned,
-        { id: nanoid(), mission: value, openMenu: false, isEdit: false }
       ],
       progress: [...table.progress],
       completed: [...table.completed],
@@ -176,7 +178,10 @@ function App() {
       if (type == 'planned') {
         json = {
           planned: filteredArray,
-          progress: [...isTable.progress, taskToMove],
+          progress: [
+            taskToMove,
+            ...isTable.progress,
+          ],
           completed: [...isTable.completed],
         }
 
@@ -184,7 +189,10 @@ function App() {
         json = {
           planned: [...isTable.planned],
           progress: filteredArray,
-          completed: [...isTable.completed, taskToMove],
+          completed: [
+            taskToMove,
+            ...isTable.completed,
+          ],
         }
       }
 
@@ -199,8 +207,12 @@ function App() {
     <div className="tables">
       <section className="table planned">
         <div className="name">
-          Запланировано
-          <button onClick={() => setOpenNew(true)} >+</button>
+          <p>
+            Запланировано:
+            {table.planned.length}
+            <button onClick={() => setOpenNew(true)} >+</button>
+          </p>
+          <hr />
         </div>
         <div className="info">
           <Tasks
@@ -218,7 +230,11 @@ function App() {
       </section>
       <section className="table progress">
         <div className="name">
-          В процессе
+          <p>
+            В процессе:
+            {table.progress.length}
+          </p>
+          <hr />
         </div>
         <div className="info">
           <Tasks
@@ -232,7 +248,11 @@ function App() {
       </section>
       <section className="table completed">
         <div className="name">
-          Завершено
+          <p>
+            Завершено:
+            {table.completed.length}
+          </p>
+          <hr />
         </div>
         <div className="info">
           <Tasks

@@ -1,0 +1,24 @@
+.form{
+    position: fixed;
+    right: 0;left: 0;top: 0;bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.166);
+}
+.form-elem{
+    position: relative;
+    background-color: black;
+    width: 300px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.close{
+    position: absolute;
+    top: 10px;right: 10px;
+}
+

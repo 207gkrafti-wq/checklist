@@ -2,15 +2,53 @@
   display: flex;
   align-items: start;
   justify-content: space-around;
-  border: 1px solid rgb(255, 0, 0);
   height: 100vb;
   box-sizing: border-box;
   width: min(1200px, 100%);
   padding-top: 40px;
+  box-shadow: 0 0 30px 1px rgb(146, 146, 146);
 }
 
 .table{
-  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 10px 2px rgb(63, 63, 63);
   width: 350px;
-  max-height: 90%;
+  min-width: 250px;  
+  overflow: hidden;
+  max-height: 93%;
+  margin: 0 5px;
+  border-radius: 10px;
+  padding: 10px 5px;
+}
+
+.name{
+  
+  width: 100%;
+}
+
+.name p{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+
+.info{
+  margin-top: 15px;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  
+}
+
+.info ul {
+  padding: 0;
+  margin: 0;
+  width: 100%;
 }

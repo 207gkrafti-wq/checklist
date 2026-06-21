@@ -1,5 +1,5 @@
 import { memo } from "react";
-
+import './Menu.css'
 function Menu({ editTask, type, id, isEdit, elemIsEdit, delTask, nextTask }) {
     return (<>
         <div className="edit">
