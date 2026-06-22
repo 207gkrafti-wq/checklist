@@ -7,7 +7,7 @@ function NewPlan({ newPlan, setOpenNew, value, setValue }) {
                 <h3>Добавь заметку</h3>
                 <button className='close' onClick={() => { setOpenNew(false); setValue('') }}>⨉</button>
                 <input type="text" value={value} onChange={e => setValue(e.target.value)} autoFocus />
-                <button className='form-add' onClick={newPlan} >Добавиь</button>
+                <button className='form-add' onClick={newPlan} >Добавь</button>
             </div>
         </div>
     </>);
