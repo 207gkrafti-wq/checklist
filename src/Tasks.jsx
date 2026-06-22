@@ -22,7 +22,7 @@ function Tasks({ table, editTask, type, isOpenMenu, isEdit, setValueEdit, valueE
                 }
                 {
                     elem.isEdit ?
-                        <input className="edit-text" type="text" maxLength={255} defaultValue={elem.mission} onChange={e => setValueEdit(e.target.value)} onFocus={() => setValueEdit(elem.mission)} autoFocus />
+                        <input className="edit-text" onKeyUp={(e)=>{if(e.key === 'Enter') editTask(elem.id, type)}} type="text" maxLength={255} defaultValue={elem.mission} onChange={e => setValueEdit(e.target.value)} onFocus={() => setValueEdit(elem.mission)} autoFocus />
                         : <p className="text" style={type === 'completed' ? { textDecoration: 'line-through' } : {}} >{elem.mission}</p>
                 }
 
