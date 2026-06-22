@@ -210,7 +210,7 @@ function App() {
           <p>
             Запланировано:
             {table.planned.length}
-            <button onClick={() => setOpenNew(true)} >+</button>
+            <button title="Новая задача" className="add" onClick={() => setOpenNew(true)} >+</button>
           </p>
           <hr />
         </div>

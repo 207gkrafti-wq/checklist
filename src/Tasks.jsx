@@ -17,6 +17,7 @@ function Tasks({ table, editTask, type, isOpenMenu, isEdit, setValueEdit, valueE
                         index={index}
                         delTask={delTask}
                         nextTask={nextTask}
+                        openMenu={elem.openMenu}
                     />
                 }
                 {
@@ -33,6 +34,7 @@ function Tasks({ table, editTask, type, isOpenMenu, isEdit, setValueEdit, valueE
     return (<>
         <ul>
             {result}
+            
         </ul>
     </>);
 }
